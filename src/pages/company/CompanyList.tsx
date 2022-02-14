@@ -6,6 +6,7 @@ import Company from '../../models/Company';
 import apiService from '../../services/apiService';
 import { ColumnsType } from 'antd/lib/table';
 import { formatDate } from '../../utils';
+import { Link } from 'react-router-dom';
 
 function CompanyList() {
 
@@ -48,7 +49,7 @@ function CompanyList() {
       {
          title: 'Actions',
          key: 'actions',
-         render: (text: string, record: any) => ( <Button shape="default" icon={<EyeOutlined />} /> )
+         render: (text, record) => ( <Link to={'/companies/' + record.id}><Button shape="default" icon={<EyeOutlined />} /></Link> )
       }
    ];
 
