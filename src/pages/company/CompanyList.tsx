@@ -5,6 +5,7 @@ import { EyeOutlined, DeleteOutlined, RedoOutlined } from '@ant-design/icons';
 import Company from '../../models/Company';
 import apiService from '../../services/apiService';
 import { ColumnsType } from 'antd/lib/table';
+import { formatDate } from '../../utils';
 
 function CompanyList() {
 
@@ -36,17 +37,18 @@ function CompanyList() {
          title: 'Created At',
          dataIndex: 'createdAt',
          key: 'createdAt',
-         render: (_, record) => (<span>{record.createdAt!.toLocaleString()}</span>)
-       },
+         render: (_, record) => (<span>{formatDate(record.createdAt!)}</span>)
+      },
+      {
+         title: 'Updated At',
+         dataIndex: 'updatedAt',
+         key: 'updateddAt',
+         render: (_, record) => (<span>{formatDate(record.updatedAt!)}</span>)
+      },
       {
          title: 'Actions',
          key: 'actions',
-         render: (text: string, record: any) => (
-            <Space size="small">
-               <Button shape="default" icon={<EyeOutlined />} />
-               <Button color='danger' shape="default" icon={<DeleteOutlined />} danger />
-            </Space>
-         ),
+         render: (text: string, record: any) => ( <Button shape="default" icon={<EyeOutlined />} /> )
       }
    ];
 
@@ -61,8 +63,8 @@ function CompanyList() {
             </Col>
             <Col style={{ textAlign: 'right' }} span={12}>
                <Space size="small">
-                  <Button color='primary' icon={ <RedoOutlined /> } onClick={loadCompanies}></Button>
-                  <Button type='primary' color='primary'>New Company</Button>
+                  <Button color='primary' icon={ <RedoOutlined /> } onClick={loadCompanies} disabled={isLoading}></Button>
+                  <Button type='primary' color='primary' disabled={isLoading}>New Company</Button>
                </Space>
             </Col>
          </Row>
