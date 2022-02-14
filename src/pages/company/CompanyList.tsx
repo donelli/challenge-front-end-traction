@@ -7,22 +7,24 @@ import apiService from '../../services/apiService';
 import { ColumnsType } from 'antd/lib/table';
 import { formatDate } from '../../utils';
 import { Link } from 'react-router-dom';
+import ErrorAlert from '../../components/ErrorAlert';
 
 function CompanyList() {
 
+   const [ isLoading, setIsLoading ] = useState<boolean>(true);
+   const [ companies, setCompanies ] = useState<Company[]>([]);
+   const [ errorMessage, setErrorMessage ] = useState<string>('');
+   
    const loadCompanies = () => {
       
       setIsLoading(true)
       
       apiService.getCompanies()
          .then(companies => setCompanies(companies))
-         .catch(err => console.log(err))
+         .catch(err => setErrorMessage('An error ocurred'))
          .finally(() => setIsLoading(false));
          
    }
-   
-   const [ isLoading, setIsLoading ] = useState<boolean>(true);
-   const [ companies, setCompanies ] = useState<Company[]>([]);
    
    useEffect(() => {
       loadCompanies();
@@ -70,7 +72,11 @@ function CompanyList() {
             </Col>
          </Row>
          
-         <Table columns={columns} rowKey="id" loading={isLoading} dataSource={companies} />
+         {
+            errorMessage
+               ? <ErrorAlert message={errorMessage} />
+               : <Table columns={columns} rowKey="id" loading={isLoading} dataSource={companies} />
+         }
          
       </Content>
    )
