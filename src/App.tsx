@@ -1,25 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
+import { Layout } from 'antd';
+import { Route, Routes } from 'react-router-dom';
+import CompanyList from './pages/company/CompanyList';
+const { Header, Footer } = Layout;
+
 function App() {
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout className="layout">
+    <Header>
+      <div className='menu-title'>
+        Challenge Tractian
+      </div>
+    </Header>
+    {/* <Content style={{ padding: '0 50px' }}> */}
+      <Routes>
+        <Route path="/" element={<CompanyList />} />
+      </Routes>
+    {/* </Content> */}
+    <Footer style={{ textAlign: 'center' }}>Eduardo Donelli Pellenz @ 2022</Footer>
+  </Layout>
   );
 }
 
