@@ -4,7 +4,7 @@ import './App.css';
 import { Layout } from 'antd';
 import { Route, Routes } from 'react-router-dom';
 import CompanyList from './pages/company/CompanyList';
-import CompanyDetails from './pages/company/companyDetails';
+import CompanyDetails from './pages/company/CompanyDetails';
 const { Header, Footer } = Layout;
 
 function App() {

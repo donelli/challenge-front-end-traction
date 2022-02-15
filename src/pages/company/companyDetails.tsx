@@ -1,12 +1,34 @@
-import { Breadcrumb, Col, Row } from "antd";
+import { Breadcrumb, Col, Row, Spin } from "antd";
 import { Content } from "antd/lib/layout/layout";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import ErrorAlert from "../../components/ErrorAlert";
+import apiService from "../../services/apiService";
 
 function CompanyDetails() {
 
    const { id } = useParams();
+   const [isLoading, setIsLoading] = useState(true);
+   const [errorMessage, setErrorMessage] = useState("");
    
+   useEffect(() => {
+      
+      apiService.getCompanyById(id!)
+      .then(company => {
+         
+         // TODO continue here
+         
+         console.log(company);
+         
+      })
+      .catch(error => {
+         
+         console.log(error);
+         
+      })
+      
+   }, []);
+
    return (
       <Content style={{ padding: '0 10px' }}>
 
@@ -19,14 +41,14 @@ function CompanyDetails() {
                   <Breadcrumb.Item>{id}</Breadcrumb.Item>
                </Breadcrumb>
             </Col>
-            {/* <Col style={{ textAlign: 'right' }} span={12}>
-               <Space size="small">
-                  <Button color='primary' icon={ <RedoOutlined /> } onClick={loadCompanies} disabled={isLoading}></Button>
-                  <Button type='primary' color='primary' disabled={isLoading}>New Company</Button>
-               </Space>
-            </Col> */}
          </Row>
-         
+         {isLoading
+            ? <div className="textCenter"><Spin /></div>
+            : !!errorMessage
+               ? <ErrorAlert message={errorMessage} />
+               : <div>Dados</div>
+         }
+
       </Content>
    )
 }
