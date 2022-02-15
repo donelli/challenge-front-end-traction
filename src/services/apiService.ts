@@ -30,6 +30,30 @@ class ApiService {
       });
    }
 
+   getCompanyById(id: string): Promise<Company> {
+      return new Promise((resolve, reject) => {
+
+         fetch(`${this.baseUrl}/companies/${id}`)
+         .then(async response => {
+
+            const data = await response.json();
+            const companyData = data.data;
+            
+            const company = new Company(companyData.name, companyData.id);
+            company.createdAt = new Date(companyData.createdAt);
+            company.updatedAt = new Date(companyData.updatedAt);
+            
+            resolve(company);
+            
+         })
+         .catch((err) => {
+            console.log(err);
+            reject(err);
+         });
+         
+      });
+   }
+
 }
 
 export default new ApiService() as ApiService
