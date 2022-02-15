@@ -21,7 +21,10 @@ function CompanyList() {
       
       apiService.getCompanies()
          .then(companies => setCompanies(companies))
-         .catch(err => setErrorMessage('An error ocurred'))
+         .catch(err => {
+            console.error(err);
+            setErrorMessage('An error ocurred')
+         })
          .finally(() => setIsLoading(false));
          
    }
