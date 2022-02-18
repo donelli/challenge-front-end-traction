@@ -3,8 +3,7 @@ import './App.css';
 
 import { Layout } from 'antd';
 import { Route, Routes } from 'react-router-dom';
-import CompanyList from './pages/company/CompanyList';
-import CompanyDetails from './pages/company/CompanyDetails';
+import HomePage from './pages/HomePage';
 const { Header, Footer } = Layout;
 
 function App() {
@@ -18,8 +17,7 @@ function App() {
     </Header>
     {/* <Content style={{ padding: '0 50px' }}> */}
       <Routes>
-        <Route path="/" element={<CompanyList />} />
-        <Route path="/companies/:id" element={<CompanyDetails />} />
+        <Route path="/" element={<HomePage />} />
       </Routes>
     {/* </Content> */}
     <Footer style={{ textAlign: 'center' }}>Eduardo Donelli Pellenz @ 2022</Footer>
