@@ -3,9 +3,9 @@ import { List, Button, Row, Col, Modal, Form, Input, Typography, message, Popcon
 import { useEffect, useState } from "react";
 import Company from "../../models/Company";
 import apiService from "../../services/apiService";
-import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Link } from "react-router-dom";
 
-const { confirm } = Modal;
 const { Title } = Typography;
 
 interface CompanyModalFormProps {
@@ -88,6 +88,8 @@ const SelectCompany: React.FC = () => {
       })
       .catch(err => {
          // TODO handle error
+         console.error(err);
+         
       })
 
    }, [])
@@ -180,7 +182,11 @@ const SelectCompany: React.FC = () => {
                   renderItem={item => (
                      <List.Item
                         actions={[
-                           <Button type="primary">Select</Button>,
+                           
+                           <Link to={"/" + item.id}>
+                              <Button type="primary">Select</Button>
+                           </Link>,
+                           
                            <Button type="default" icon={ <EditOutlined /> } onClick={() => editCompany(item)}></Button>,
                            
                            <Popconfirm
