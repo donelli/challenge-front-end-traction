@@ -1,8 +1,10 @@
 
 @import '~antd/dist/antd.css';
 
-.menu-title {
+.main-header {
+   display: flex;
    color: white;
+   justify-content: space-between;
 }
 
 .textCenter {
