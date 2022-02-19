@@ -1,5 +1,4 @@
 
-import * as axios from 'axios';
 import Company from '../models/Company';
 
 class ApiService {
@@ -21,134 +20,82 @@ class ApiService {
 
       return company;
    }
-   
-   getCompanies(): Promise<Company[]> {
+
+   private performRequest(endpoint: string, method: 'POST' | 'GET' | 'PUT' | 'DELETE', body?: any): Promise<{ status: number, data: any }> {
       return new Promise((resolve, reject) => {
          
-         fetch(`${this.baseUrl}/companies`)
-         .then(async response => {
-            
-            const companies: Company[] = [];
-
-            const data = await response.json();
-            
-            for (const companyObject of data.data) {
-               const company = this.dataToCompany(companyObject);
-               companies.push(company);
-            }
-
-            resolve(companies);
-         })
-         .catch(reject);
-         
-      });
-   }
-
-   getCompanyById(id: string): Promise<Company> {
-      return new Promise((resolve, reject) => {
-
-         fetch(`${this.baseUrl}/companies/${id}`)
-         .then(async response => {
-
-            const data = await response.json();
-            const companyData = data.data;
-            
-            const company = this.dataToCompany(companyData);
-            
-            resolve(company);
-            
-         })
-         .catch((err) => {
-            console.log(err);
-            reject(err);
-         });
-         
-      });
-   }
-
-   createNewCompany(companyName: string): Promise<Company> {
-      return new Promise((resolve, reject) => {
-
-         fetch(`${this.baseUrl}/companies`, {
-            method: 'POST',
-            headers: this.headers,
-            body: JSON.stringify({ name: companyName })
-         })
-         .then(async response => {
-            
-            const data = await response.json();
-            
-            if (response.status === 201) {    // Created
-               
-               const companyData = data.data;
-               const company = this.dataToCompany(companyData);
-               
-               return resolve(company);
-            }
-            
-            reject(data);
-            
-         })
-         .catch((err) => {
-            reject(err);
-         });
-         
-      });
-   }
-
-   updateCompany(companyName: string, companyId: string): Promise<Company> {
-      return new Promise((resolve, reject) => {
-
-         fetch(`${this.baseUrl}/companies/${companyId}`, {
-            method: 'PUT',
-            headers: this.headers,
-            body: JSON.stringify({ name: companyName })
-         })
-         .then(async response => {
-            
-            const data = await response.json();
-            
-            if (response.status === 200) {
-               
-               const companyData = data.data;
-               const company = this.dataToCompany(companyData);
-               
-               return resolve(company);
-            }
-            
-            reject(data);
-            
-         })
-         .catch((err) => {
-            console.log(err);
-            reject(err);
-         });
-         
-      });
-   }
-
-   deleteCompany(companyId: string): Promise<null> {
-      return new Promise((resolve, reject) => {
-
-         fetch(`${this.baseUrl}/companies/${companyId}`, {
-            method: 'DELETE',
+         fetch(`${this.baseUrl}${endpoint}`, {
+            method,
+            body,
             headers: this.headers
          })
          .then(async response => {
             
-            if (response.status === 200) {
-               resolve(null);
-            } else {
-               const data = await response.json();
-               reject(data)
+            const data = await response.json();
+            
+            if (response.status >= 400) {
+               return reject({
+                  status: response.status,
+                  message: data?.message ?? "Something went wrong"
+               })
             }
+
+            resolve({
+               status: response.status,
+               data: data.data
+            });
             
          })
-         .catch((err) => {
-            reject(err);
+         .catch(err => {
+            
+            return reject({
+               status: 500,
+               message: err.message
+            });
+            
          });
          
       });
+   }
+   
+   getCompanies(): Promise<Company[]> {
+      
+      return this.performRequest('/companies', 'GET')
+      .then(response => {
+         return response.data.map((companyData: any) => this.dataToCompany(companyData));
+      });
+      
+   }
+
+   getCompanyById(id: string): Promise<Company> {
+      
+      return this.performRequest(`/companies/${id}`, 'GET')
+      .then(response => {
+         return this.dataToCompany(response.data)
+      });
+      
+   }
+
+   createNewCompany(companyName: string): Promise<Company> {
+      
+      return this.performRequest('/companies', 'POST', JSON.stringify({ name: companyName }))
+      .then(response => {
+         return this.dataToCompany(response.data)
+      });
+      
+   }
+
+   updateCompany(companyName: string, companyId: string): Promise<Company> {
+      
+      return this.performRequest(`/companies/${companyId}`, 'PUT', JSON.stringify({ name: companyName }))
+      .then(response => {
+         return this.dataToCompany(response.data)
+      });
+      
+   }
+
+   deleteCompany(companyId: string): Promise<any> {
+      return this.performRequest(`/companies/${companyId}`, 'DELETE');
    }
 
 }
