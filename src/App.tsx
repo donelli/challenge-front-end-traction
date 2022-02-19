@@ -10,6 +10,8 @@ import Company from './models/Company';
 import apiService from './services/apiService';
 const { Header, Footer } = Layout;
 
+let currentCompanyId: Company | undefined = undefined;
+
 function App() {
   
   const location = useLocation()
@@ -21,11 +23,12 @@ function App() {
       // TODO probably need to use a better way to do this
       const params = location.pathname.split('/');
       
-      if (params.length >= 2) {
+      if (params.length >= 2 && params[1]) {
         
-        if (!currentCompany || currentCompany.id != params[1]) {
+        if (!currentCompanyId || currentCompanyId.id !== params[1]) {
           apiService.getCompanyById(params[1]).then((company) => {
             setCurrentCompany(company);
+            currentCompanyId = company;
           });
         }
         
