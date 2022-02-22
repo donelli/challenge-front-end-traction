@@ -60,7 +60,7 @@ const CompanyPage: React.FC = () => {
             }));
             setLoadingAssetsPerStatus(false);
             
-            setAverageTempPerHourData([ 25, 27, 24, 32, 37, 45, 40, 25, 27, 28, 30, 29, 28, 28, 27, 25, 19, 21, 25, 28, 27 ])
+            setAverageTempPerHourData([ 25, 27, 24, 32, 37, 45, 40, 25, 27, 28, 30, 29, 28, 28, 27, 25, 19, 21, 25, 28, 27, 29, 32, 35, 40, 55, 51, 52, 49 ])
             setLoadingAverageTempData(false);
             
          })
@@ -168,7 +168,7 @@ const CompanyPage: React.FC = () => {
          <Divider />
 
          <Row>
-            <Col xs={24} lg={11} style={{ marginBottom: '10px' }}>
+            <Col xs={24} lg={7} style={{ marginBottom: '10px' }}>
                
                <Spin spinning={isLoadingAssetsPerStatus}>
                   <HighchartsReact
@@ -179,8 +179,7 @@ const CompanyPage: React.FC = () => {
                </Spin>
 
             </Col>
-            <Col xs={0} lg={2}></Col>
-            <Col xs={24} lg={11} style={{ marginBottom: '10px' }}>
+            <Col xs={22} offset={1} lg={16} style={{ marginBottom: '10px' }}>
             
                <Spin spinning={isLoadingAverageTempData}>
                   <HighchartsReact
