@@ -46,21 +46,21 @@ const CompanyPage: React.FC = () => {
       {company && <div>
          
          <Row>
-            <Col span={24} style={{ marginBottom: '10px' }}>
+            <Col span={16} style={{ marginBottom: '10px' }}>
                <Statistic title="Company name" value={company.name} />
             </Col>
-            <Col xs={24} md={6}>
+            <Col xs={12} md={4}>
                <Statistic title="Created At" value={company.createdAt?.toLocaleDateString()} />
             </Col>
-            <Col xs={24} md={6}>
+            <Col xs={12} md={4}>
                <Statistic title="Updated At" value={company.updatedAt?.toLocaleDateString()} />
             </Col>
-            <Col xs={24} md={6}>
+            {/* <Col xs={24} md={6}>
                <Statistic title="Units count" value={company.unitCount} />
             </Col>
             <Col xs={24} md={6}>
                <Statistic title="Users count" value={company.userCount} />
-            </Col>
+            </Col> */}
          </Row>
 
          <Divider />
