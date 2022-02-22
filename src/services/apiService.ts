@@ -1,5 +1,6 @@
 
 import Company from '../models/Company';
+import User from '../models/User';
 
 class ApiService {
 
@@ -22,6 +23,11 @@ class ApiService {
       company.userCount = data.userCount;
 
       return company;
+   }
+
+   private dataToUser(data: any): User {
+      const user = new User(data.id, data.name);
+      return user;
    }
 
    private performRequest(endpoint: string, method: 'POST' | 'GET' | 'PUT' | 'DELETE', body?: any): Promise<{ status: number, data: any }> {
@@ -106,6 +112,15 @@ class ApiService {
       return this.performRequest(`/companies/${id}/assets/status`, 'GET')
       .then(response => {
          return response.data;
+      });
+      
+   }
+
+   getUsers(id: string): Promise<User[]> {
+      
+      return this.performRequest(`/companies/${id}/users`, 'GET')
+      .then(response => {
+         return response.data.map((data: any) => this.dataToUser(data));
       });
       
    }
