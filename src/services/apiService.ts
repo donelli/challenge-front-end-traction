@@ -18,6 +18,9 @@ class ApiService {
       company.createdAt = new Date(data.createdAt);
       company.updatedAt = new Date(data.updatedAt);
 
+      company.unitCount = data.unitCount;
+      company.userCount = data.userCount;
+
       return company;
    }
 
@@ -96,6 +99,15 @@ class ApiService {
 
    deleteCompany(companyId: string): Promise<any> {
       return this.performRequest(`/companies/${companyId}`, 'DELETE');
+   }
+
+   getAssetStatusSummary(id: string): Promise<{ status: string, count: number }[]> {
+      
+      return this.performRequest(`/companies/${id}/assets/status`, 'GET')
+      .then(response => {
+         return response.data;
+      });
+      
    }
 
 }
