@@ -125,6 +125,28 @@ class ApiService {
       
    }
 
+   createNewUser(companyId: string, userName: string): Promise<User> {
+      
+      return this.performRequest(`/companies/${companyId}/users`, 'POST', JSON.stringify({ name: userName }))
+      .then(response => {
+         return this.dataToUser(response.data)
+      });
+      
+   }
+
+   updateUser(companyId: string, userId: string, userName: string): Promise<User> {
+      
+      return this.performRequest(`/companies/${companyId}/users/${userId}`, 'PUT', JSON.stringify({ name: userName }))
+      .then(response => {
+         return this.dataToUser(response.data)
+      });
+      
+   }
+
+   deleteUser(companyId: string, userId: string): Promise<any> {
+      return this.performRequest(`/companies/${companyId}/users/${userId}`, 'DELETE');
+   }
+
 }
 
 export default new ApiService() as ApiService
