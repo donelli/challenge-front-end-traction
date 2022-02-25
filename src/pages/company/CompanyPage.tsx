@@ -76,7 +76,7 @@ const CompanyPage: React.FC = () => {
                List of units
                
             </TabPane>
-            <TabPane tab="Assets" key="3">
+            <TabPane tab="General view of assets" key="3">
                
                <AllAssetsPage companyId={companyId!} />
                
