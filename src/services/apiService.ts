@@ -1,3 +1,5 @@
+import { Unit } from './../models/Unit';
+import { Asset, AssetStatus } from './../models/Asset';
 
 import Company from '../models/Company';
 import User from '../models/User';
@@ -32,6 +34,21 @@ class ApiService {
       user.updatedAt = new Date(data.updatedAt);
       
       return user;
+   }
+
+   private dataToUnit(data: any): Unit {
+      return new Unit(data.id, data.name);
+   }
+
+   private dataToAsset(data: any): Asset {
+      
+      const unit = this.dataToUnit(data.unit);
+      
+      const asset = new Asset(data.id, data.name, data.description, data.model, data.owner, data.image, data.health_level, unit, data.status as AssetStatus);
+      asset.updatedAt = data.updatedAt;
+      asset.createdAt = data.createdAt;
+      
+      return asset;
    }
 
    private performRequest(endpoint: string, method: 'POST' | 'GET' | 'PUT' | 'DELETE', body?: any): Promise<{ status: number, data: any }> {
@@ -109,6 +126,15 @@ class ApiService {
 
    deleteCompany(companyId: string): Promise<any> {
       return this.performRequest(`/companies/${companyId}`, 'DELETE');
+   }
+
+   getAssetsFromCompany(companyId: string): Promise<Asset[]> {
+      
+      return this.performRequest(`/companies/${companyId}/assets`, 'GET')
+      .then(response => {
+         return response.data.map((data: any) => this.dataToAsset(data));
+      });
+      
    }
 
    getAssetStatusSummary(id: string): Promise<{ status: string, count: number }[]> {
