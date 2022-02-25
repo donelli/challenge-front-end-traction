@@ -2,7 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import apiService from "../../services/apiService";
-import { Divider, Row, Col, Spin } from "antd";
+import { Divider, Row, Col, Spin, Table, TableColumnsType } from "antd";
+import { Asset, AssetStatus } from "../../models/Asset";
+import { Unit } from "../../models/Unit";
+import { StatusIndicator } from "../../components/StatusIndicator";
 
 interface AllAssetsPageProps {
    companyId: string;
@@ -35,6 +38,9 @@ const AllAssetsPage: React.FC<AllAssetsPageProps> = ({ companyId }) => {
    const [assetsPerStatus, setAssetsPerStatus] = useState<AssetPerStatus[]>();
    const [isLoadingAssetsPerStatus, setLoadingAssetsPerStatus] = useState(true);
    
+   const [assets, setAssets] = useState<Asset[]>();
+   const [isLoadingAssets, setLoadingAssets] = useState(true);
+
    const tempPerHourChartComponentRef = useRef<HighchartsReact.RefObject>(null);
    const statusChartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
@@ -54,6 +60,17 @@ const AllAssetsPage: React.FC<AllAssetsPageProps> = ({ companyId }) => {
          
          setAverageTempPerHourData([ 25, 27, 24, 32, 37, 45, 40, 25, 27, 28, 30, 29, 28, 28, 27, 25, 19, 21, 25, 28, 27, 29, 32, 35, 40, 55, 51, 52, 49 ])
          setLoadingAverageTempData(false);
+         
+      })
+      .catch(err => {
+         // TODO handle error
+      });
+      
+      apiService.getAssetsFromCompany(companyId!)
+      .then(data => {
+         
+         setAssets(data)
+         setLoadingAssets(false);
          
       })
       .catch(err => {
@@ -114,6 +131,27 @@ const AllAssetsPage: React.FC<AllAssetsPageProps> = ({ companyId }) => {
         }
       }
    };
+
+   const assetsTableCols: TableColumnsType<Asset> = [
+      {
+         title: 'Model',
+         dataIndex: 'model'
+      },
+      {
+         title: 'Name',
+         dataIndex: 'name'
+      },
+      {
+         title: 'Status',
+         dataIndex: 'status',
+         render: (status: AssetStatus) => (<StatusIndicator assetStatus={status} />)
+      },
+      {
+         title: 'Unit',
+         dataIndex: 'unit',
+         render: (unit: Unit) => unit.name
+      }
+   ];
    
    return (
       <div>
@@ -145,6 +183,17 @@ const AllAssetsPage: React.FC<AllAssetsPageProps> = ({ companyId }) => {
             </Col>
          </Row>
 
+         <Divider />
+
+         <Table
+            locale={{ emptyText: 'No assets found' }}
+            style={{ marginTop: '10px' }}
+            rowKey={(asset: Asset) => asset.id}
+            loading={isLoadingAssets}
+            columns={assetsTableCols}
+            dataSource={assets}
+         />
+         
       </div>
    )
 }
