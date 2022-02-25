@@ -187,13 +187,23 @@ const UsersPage: React.FC<UsersPageProps> = ({ companyId }) => {
         dataIndex: 'name'
       },
       {
+         title: 'Created At',
+         dataIndex: 'createdAt',
+         render: (createdAt: Date) => <span>{createdAt.toLocaleString()}</span>
+      },
+      {
+         title: 'Updated At',
+         dataIndex: 'updatedAt',
+         render: (createdAt: Date) => <span>{createdAt.toLocaleString()}</span>
+      },
+      {
          title: 'Action',
          key: 'action',
          render: (text, user) => (
             <Space size="middle">
                
                <Button type="default" icon={ <EditOutlined /> } onClick={() => editUser(user)}></Button>
-                  
+               
                <Popconfirm
                   title="Are you sure to delete this user?"
                   onConfirm={() => deleteUser(user)}

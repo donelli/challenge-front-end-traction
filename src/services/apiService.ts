@@ -26,7 +26,11 @@ class ApiService {
    }
 
    private dataToUser(data: any): User {
+      
       const user = new User(data.id, data.name);
+      user.createdAt = new Date(data.createdAt);
+      user.updatedAt = new Date(data.updatedAt);
+      
       return user;
    }
 
