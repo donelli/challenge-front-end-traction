@@ -1,11 +1,11 @@
-import { Alert, Button, Col, Form, Input, message, Popconfirm, Row, Space, Table, TableColumnsType } from "antd";
+import { Button, Col, Input, message, Popconfirm, Row, Space, Table, TableColumnsType } from "antd";
 import { useEffect, useState } from "react";
 import User from "../../models/User";
 import apiService from "../../services/apiService";
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import Modal from "antd/lib/modal/Modal";
+import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { Unit } from "../../models/Unit";
 import UnitModalForm from "./UnitModalForm";
+import { Link } from "react-router-dom";
 
 const { Search } = Input;
 
@@ -141,7 +141,11 @@ const UnitsPage: React.FC<UnitsPageProps> = ({ companyId }) => {
          title: 'Action',
          key: 'action',
          render: (text, unit) => (
-            <Space size="middle">
+            <Space size="small">
+               
+               <Link to={`/${companyId}/${unit.id}/assets`}>
+                  <Button type="primary" icon={<EyeOutlined />}></Button>
+               </Link>
                
                <Button type="default" icon={ <EditOutlined /> } onClick={() => editUnit(unit)}></Button>
                

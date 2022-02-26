@@ -46,8 +46,12 @@ class ApiService {
    }
 
    private dataToAsset(data: any): Asset {
+
+      let unit: Unit | undefined;
       
-      const unit = this.dataToUnit(data.unit);
+      if (data.unit) {
+         unit = this.dataToUnit(data.unit);
+      }
       
       const asset = new Asset(data.id, data.name, data.description, data.model, data.owner, data.image, data.health_level, unit, data.status as AssetStatus);
       asset.updatedAt = data.updatedAt;
@@ -229,6 +233,46 @@ class ApiService {
 
    deleteUnit(companyId: string, unitId: string): Promise<any> {
       return this.performRequest(`/companies/${companyId}/units/${unitId}`, 'DELETE');
+   }
+   
+   getAssets(companyId: string, unitId: string): Promise<Asset[]> {
+      
+      return this.performRequest(`/companies/${companyId}/units/${unitId}/assets`, 'GET')
+      .then(response => {
+         return response.data.map((data: any) => this.dataToAsset(data));
+      });
+      
+   }
+
+   getAssetById(companyId: string, unitId: string, assetId: string): Promise<Asset> {
+      
+      return this.performRequest(`/companies/${companyId}/units/${unitId}/assets/${assetId}`, 'GET')
+      .then(response => {
+         return this.dataToAsset(response.data);
+      });
+      
+   }
+
+   createNewAsset(companyId: string, unitId: string, asset: Asset): Promise<Asset> {
+      
+      return this.performRequest(`/companies/${companyId}/units/${unitId}/assets`, 'POST', JSON.stringify(asset))
+      .then(response => {
+         return this.dataToAsset(response.data)
+      });
+      
+   }
+
+   updateAsset(companyId: string, unitId: string, asset: Asset): Promise<Asset> {
+      
+      return this.performRequest(`/companies/${companyId}/units/${unitId}/assets/${asset.id}`, 'PUT', JSON.stringify(asset))
+      .then(response => {
+         return this.dataToAsset(response.data)
+      });
+      
+   }
+
+   deleteAsset(companyId: string, unitId: string, assetId: string): Promise<any> {
+      return this.performRequest(`/companies/${companyId}/units/${unitId}/assets/${assetId}`, 'DELETE');
    }
    
 }

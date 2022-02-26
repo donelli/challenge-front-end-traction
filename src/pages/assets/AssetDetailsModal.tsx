@@ -58,7 +58,7 @@ const AssetDetailsModal: React.FC<AssetDetailsModalProps> = ({ companyId, asset,
          <Descriptions.Item label="Model" span={3}>{asset.model}</Descriptions.Item>
          <Descriptions.Item label="Name" span={3}>{asset.name}</Descriptions.Item>
          <Descriptions.Item label="Description" span={3}>{asset.description}</Descriptions.Item>
-         <Descriptions.Item label="Unit" span={3}>{asset.unit.name}</Descriptions.Item>
+         {asset.unit && <Descriptions.Item label="Unit" span={3}>{asset.unit!.name}</Descriptions.Item>}
          <Descriptions.Item label="Owner" span={3}>
             
             {

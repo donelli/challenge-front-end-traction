@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage';
 import CompanyPage from './pages/company/CompanyPage';
 import Company from './models/Company';
 import apiService from './services/apiService';
+import AssetsPage from './pages/assets/AssetsPage';
 const { Header, Footer } = Layout;
 
 let currentCompanyId: Company | undefined = undefined;
@@ -56,6 +57,7 @@ function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/:companyId" element={<CompanyPage />} />
+      <Route path="/:companyId/:unitId/assets" element={<AssetsPage />} />
     </Routes>
     <Footer style={{ textAlign: 'center' }}>Eduardo Donelli Pellenz @ 2022</Footer>
   </Layout>

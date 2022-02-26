@@ -18,12 +18,12 @@ export class Asset {
    imageUrl: string;
    status: AssetStatus;
    healthLevel: number;
-   unit: Unit;
+   unit?: Unit;
    
    createdAt?: Date;
    updatedAt?: Date;
    
-   constructor(id: string, name: string, description: string, model: string, ownerId: string, imageUrl: string, healthLevel: number, unit: Unit, status: AssetStatus) {
+   constructor(id: string, name: string, description: string, model: string, ownerId: string, imageUrl: string, healthLevel: number, unit: Unit | undefined, status: AssetStatus) {
       this.id = id;
       this.name = name;
       this.description = description;
