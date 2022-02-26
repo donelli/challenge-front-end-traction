@@ -51,7 +51,7 @@ const AssetDetailsModal: React.FC<AssetDetailsModalProps> = ({ companyId, asset,
       okButtonProps={{ style: { display: 'none' } }}
       cancelText={ 'Close' }
       onCancel={onModalClose}
-      width={isMobile ? '90%' : '50%'}
+      width={isMobile ? '90%' : '80%'}
    >
       
       <Descriptions bordered layout="horizontal">
@@ -74,11 +74,11 @@ const AssetDetailsModal: React.FC<AssetDetailsModalProps> = ({ companyId, asset,
             <StatusIndicator assetStatus={asset.status} />
          </Descriptions.Item>
          
-         <Descriptions.Item label="Health level" span={1}>
+         <Descriptions.Item label="Health level" span={isMobile ? 3 : 1}>
             <Progress type="circle" percent={asset.healthLevel} status={ asset.healthLevel <= 50 ? 'exception' : 'normal' } />
          </Descriptions.Item>
          
-         <Descriptions.Item label="Image" span={1}>
+         <Descriptions.Item label="Image" span={isMobile ? 3 : 1}>
             <Image src={asset.imageUrl} width="200px" />
          </Descriptions.Item>
          
