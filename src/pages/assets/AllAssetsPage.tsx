@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import apiService from "../../services/apiService";
-import { Divider, Row, Col, Spin, Table, TableColumnsType } from "antd";
+import { Divider, Row, Col, Spin, Table, TableColumnsType, Result, Button, Image } from "antd";
 import { Asset, AssetStatus } from "../../models/Asset";
 import { Unit } from "../../models/Unit";
 import { StatusIndicator } from "../../components/StatusIndicator";
+import AssetDetailsModal from "./AssetDetailsModal";
 
 interface AllAssetsPageProps {
    companyId: string;
@@ -41,8 +42,13 @@ const AllAssetsPage: React.FC<AllAssetsPageProps> = ({ companyId }) => {
    const [assets, setAssets] = useState<Asset[]>();
    const [isLoadingAssets, setLoadingAssets] = useState(true);
 
+   const [isAssetDetailsModalVisible, setAssetDetailsModalVisible] = useState(false);
+   const [assetDetailsToShow, setAssetDetailsToShow] = useState<Asset>();
+   
    const tempPerHourChartComponentRef = useRef<HighchartsReact.RefObject>(null);
    const statusChartComponentRef = useRef<HighchartsReact.RefObject>(null);
+
+   const [error, setError] = useState("");
 
    useEffect(() => {
       
@@ -63,7 +69,7 @@ const AllAssetsPage: React.FC<AllAssetsPageProps> = ({ companyId }) => {
          
       })
       .catch(err => {
-         // TODO handle error
+         setError(err.message);
       });
       
       apiService.getAssetsFromCompany(companyId!)
@@ -74,7 +80,7 @@ const AllAssetsPage: React.FC<AllAssetsPageProps> = ({ companyId }) => {
          
       })
       .catch(err => {
-         // TODO handle error
+         setError(err.message);
       });
       
    }, [ companyId ]);
@@ -132,7 +138,21 @@ const AllAssetsPage: React.FC<AllAssetsPageProps> = ({ companyId }) => {
       }
    };
 
+   const openAssetDetailsModal = (asset: Asset) => {
+      setAssetDetailsToShow(asset);
+      setAssetDetailsModalVisible(true);
+   }
+
+   const closeAssetDetailsModal = () => {
+      setAssetDetailsModalVisible(false);
+   }
+   
    const assetsTableCols: TableColumnsType<Asset> = [
+      {
+         title: 'Image',
+         dataIndex: 'imageUrl',
+         render: (imageUrl: string) => (<Image src={imageUrl} />)
+      },
       {
          title: 'Model',
          dataIndex: 'model'
@@ -150,13 +170,32 @@ const AllAssetsPage: React.FC<AllAssetsPageProps> = ({ companyId }) => {
          title: 'Unit',
          dataIndex: 'unit',
          render: (unit: Unit) => unit.name
+      },
+      {
+         title: 'Actions',
+         dataIndex: 'id',
+         render: (id: string, asset: Asset) => (<Button type="link" onClick={() => openAssetDetailsModal(asset)}>Details</Button>)
       }
    ];
    
+   if (error) {
+      return (
+         <Row>
+            <Col span={24}>
+               
+               <Result
+                  status="error"
+                  title="Error loading assets"
+                  subTitle="An error ocurred while loading the assets. Please try again later."
+               />
+               
+            </Col>
+         </Row>
+      );
+   }
+   
    return (
       <div>
-
-         <Divider />
 
          <Row>
             <Col xs={24} lg={7} style={{ marginBottom: '10px' }}>
@@ -192,6 +231,13 @@ const AllAssetsPage: React.FC<AllAssetsPageProps> = ({ companyId }) => {
             loading={isLoadingAssets}
             columns={assetsTableCols}
             dataSource={assets}
+         />
+         
+         <AssetDetailsModal
+            companyId={companyId}
+            asset={assetDetailsToShow!}
+            visible={isAssetDetailsModalVisible}
+            onModalClose={closeAssetDetailsModal}
          />
          
       </div>
