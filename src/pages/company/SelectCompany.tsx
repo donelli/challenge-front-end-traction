@@ -1,73 +1,13 @@
-import { List, Button, Row, Col, Modal, Form, Input, Typography, message, Popconfirm, Alert } from "antd";
+import { List, Button, Row, Col, Typography, message, Popconfirm } from "antd";
 
 import { useEffect, useState } from "react";
 import Company from "../../models/Company";
 import apiService from "../../services/apiService";
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
+import CompanyModalForm from "./CompanyModalForm";
 
 const { Title } = Typography;
-
-interface CompanyModalFormProps {
-   company?: Company;
-   visible: boolean;
-   savingData: boolean;
-   onCancel: () => void;
-   onCreateEditSubmit: (oldCompany: Company | undefined, companyName: string) => void;
-   errorMessage: string;
-}
-
-interface CompanyFormData {
-   name: string;
-}
-
-const CompanyModalForm: React.FC<CompanyModalFormProps> = ({ visible, onCancel, company, savingData, errorMessage, onCreateEditSubmit }) => {
-   
-   const [form] = Form.useForm<CompanyFormData>();
-   
-   useEffect(() => {
-
-      if (company) {
-         form.setFieldsValue({ name: company.name });
-      } else {
-         form.setFieldsValue({ name: '' });
-      }
-      
-   }, [ company, form ])
- 
-   const onOk = () => {
-     form.submit();
-   };
-
-   const onFinish = () => {
-      onCreateEditSubmit(company, form.getFieldValue('name') as string);
-   }
-   
-   return (
-     <Modal
-         cancelButtonProps={{ disabled: savingData }}
-         okButtonProps={{ loading: savingData, }}
-         title={ company ? 'Edit company' : 'New company' }
-         visible={visible}
-         onOk={savingData ? undefined : onOk}
-         okText={savingData ? 'Saving...' : 'Ok'}
-         onCancel={onCancel}
-         closable={!savingData}
-         maskClosable={!savingData}
-      >
-         <Form form={form} layout="vertical" name="companyForm" initialValues={{ name: company ? company.name : '' }} onFinish={onFinish}>
-            
-            <Form.Item name="name" label="Company Name" rules={[{ required: true, message: 'Please input the company name!' }]}>
-               <Input disabled={savingData} />
-            </Form.Item>
-            
-         </Form>
-         
-         {errorMessage && <Alert type="error" message={errorMessage} closable={true} />}
-         
-     </Modal>
-   );
-};
 
 const SelectCompany: React.FC = () => {
 
