@@ -224,6 +224,7 @@ const UsersPage: React.FC<UsersPageProps> = ({ companyId }) => {
          <Col xs={18} md={20}>
             <Search
                placeholder="Filter users"
+               allowClear
                onSearch={onSearch}
             />
          </Col>
