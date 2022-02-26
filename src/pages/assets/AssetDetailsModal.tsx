@@ -1,5 +1,5 @@
 import { Asset } from "../../models/Asset";
-import { Alert, Col, Descriptions, Modal, Row, Spin, Statistic } from "antd";
+import { Alert, Col, Descriptions, Image, Modal, Progress, Row, Spin, Statistic } from "antd";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { StatusIndicator } from "../../components/StatusIndicator";
 import { useEffect, useState } from "react";
@@ -44,7 +44,7 @@ const AssetDetailsModal: React.FC<AssetDetailsModalProps> = ({ companyId, asset,
    if (!asset) {
       return null;
    }
-   
+
    return (<Modal
       title={ 'Asset details' }
       visible={visible}
@@ -53,8 +53,6 @@ const AssetDetailsModal: React.FC<AssetDetailsModalProps> = ({ companyId, asset,
       onCancel={onModalClose}
       width={isMobile ? '90%' : '50%'}
    >
-      
-      {/* healthLevel, image */}
       
       <Descriptions bordered layout="horizontal">
          <Descriptions.Item label="Model" span={3}>{asset.model}</Descriptions.Item>
@@ -75,6 +73,15 @@ const AssetDetailsModal: React.FC<AssetDetailsModalProps> = ({ companyId, asset,
          <Descriptions.Item label="Status" span={3}>
             <StatusIndicator assetStatus={asset.status} />
          </Descriptions.Item>
+         
+         <Descriptions.Item label="Health level" span={1}>
+            <Progress type="circle" percent={asset.healthLevel} status={ asset.healthLevel <= 50 ? 'exception' : 'normal' } />
+         </Descriptions.Item>
+         
+         <Descriptions.Item label="Image" span={1}>
+            <Image src={asset.imageUrl} width="200px" />
+         </Descriptions.Item>
+         
       </Descriptions>
       
    </Modal>)

@@ -151,7 +151,7 @@ const AllAssetsPage: React.FC<AllAssetsPageProps> = ({ companyId }) => {
       {
          title: 'Image',
          dataIndex: 'imageUrl',
-         render: (imageUrl: string) => (<Image src={imageUrl} />)
+         render: (imageUrl: string) => (<Image width={'150px'} src={imageUrl} />)
       },
       {
          title: 'Model',
