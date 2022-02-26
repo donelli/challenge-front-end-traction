@@ -37,7 +37,12 @@ class ApiService {
    }
 
    private dataToUnit(data: any): Unit {
-      return new Unit(data.id, data.name);
+      const unit = new Unit(data.id, data.name);
+
+      unit.createdAt = new Date(data.createdAt);
+      unit.updatedAt = new Date(data.updatedAt);
+      
+      return unit;
    }
 
    private dataToAsset(data: any): Asset {
@@ -186,6 +191,46 @@ class ApiService {
       return this.performRequest(`/companies/${companyId}/users/${userId}`, 'DELETE');
    }
 
+   getUnits(companyId: string): Promise<Unit[]> {
+      
+      return this.performRequest(`/companies/${companyId}/units`, 'GET')
+      .then(response => {
+         return response.data.map((data: any) => this.dataToUnit(data));
+      });
+      
+   }
+
+   getUnitById(companyId: string, unitId: string): Promise<Unit> {
+      
+      return this.performRequest(`/companies/${companyId}/units/${unitId}`, 'GET')
+      .then(response => {
+         return this.dataToUnit(response.data);
+      });
+      
+   }
+
+   createNewUnit(companyId: string, unitName: string): Promise<Unit> {
+      
+      return this.performRequest(`/companies/${companyId}/units`, 'POST', JSON.stringify({ name: unitName }))
+      .then(response => {
+         return this.dataToUnit(response.data)
+      });
+      
+   }
+
+   updateUnit(companyId: string, unitId: string, unitName: string): Promise<Unit> {
+      
+      return this.performRequest(`/companies/${companyId}/units/${unitId}`, 'PUT', JSON.stringify({ name: unitName }))
+      .then(response => {
+         return this.dataToUnit(response.data)
+      });
+      
+   }
+
+   deleteUnit(companyId: string, unitId: string): Promise<any> {
+      return this.performRequest(`/companies/${companyId}/units/${unitId}`, 'DELETE');
+   }
+   
 }
 
 export default new ApiService() as ApiService

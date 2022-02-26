@@ -5,6 +5,7 @@ import apiService from "../../services/apiService";
 import Company from "../../models/Company";
 import UsersPage from "../users/UsersPage";
 import AllAssetsPage from "../assets/AllAssetsPage";
+import UnitsPage from "../units/UnitsPage";
 
 const { Content } = Layout;
 const { TabPane } = Tabs;
@@ -73,7 +74,7 @@ const CompanyPage: React.FC = () => {
             </TabPane>
             <TabPane tab="Units" key="2">
                
-               List of units
+               <UnitsPage companyId={companyId!} />
                
             </TabPane>
             <TabPane tab="General view of assets" key="3">
