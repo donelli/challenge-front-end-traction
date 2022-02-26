@@ -155,6 +155,15 @@ class ApiService {
       
    }
 
+   getUserById(companyId: string, userId: string): Promise<User> {
+      
+      return this.performRequest(`/companies/${companyId}/users/${userId}`, 'GET')
+      .then(response => {
+         return this.dataToUser(response.data);
+      });
+      
+   }
+
    createNewUser(companyId: string, userName: string): Promise<User> {
       
       return this.performRequest(`/companies/${companyId}/users`, 'POST', JSON.stringify({ name: userName }))
