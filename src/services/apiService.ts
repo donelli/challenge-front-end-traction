@@ -68,7 +68,7 @@ class ApiService {
          model: asset.model,
          ownerId: asset.ownerId,
          imageId: asset.imageId,
-         health_level: asset.healthLevel,
+         healthLevel: asset.healthLevel,
          status: asset.status
       };
    }

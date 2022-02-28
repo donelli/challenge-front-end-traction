@@ -89,6 +89,10 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
       
       const newAsset = new Asset('', values.name, values.description, values.model, values.owner, currentImageUrl, values.healthLevel, undefined, values.status, values.imageId);
       
+      if (asset) {
+         newAsset.id = asset.id;
+      }
+      
       onCreateEditSubmit(asset, newAsset);
       
    };
@@ -99,17 +103,21 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
       name: 'file',
       action: apiService.getAssetUploadUrl(),
       beforeUpload: (file: UploadFile) => {
+         console.warn(file.type);
+         
          const isPNG = file.type === 'image/png';
          const isJPG = file.type === 'image/jpeg';
          
-         if (!isPNG && !isJPG) {
+         console.log(isPNG, isJPG);
+         
+         if (isPNG || isJPG) {
+            // ok
+         } else {
            message.error(`${file.name} is not a png/jpg file`);
          }
          return isPNG || isJPG || Upload.LIST_IGNORE;
       },
       onChange(info: UploadChangeParam) {
-         
-         console.warn(info);
          
          if (info.file.status === 'done') {
             
@@ -120,10 +128,13 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
             setCurrentImageUrl(info.file.response.fileUrl);
             setFileList([]);
             
+            message.success("Successfully updated asset image!")
+            
          } else if (info.file.status === 'error') {
             
             console.log('failed: ', info.file);
             message.error(info.file.response.message);
+            setFileList([]);
             
          } else {
             setFileList([
@@ -149,6 +160,8 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
          onCancel={onCancel}
          closable={!savingData}
          maskClosable={!savingData}
+         style={{ top: 20 }}
+         width={650}
       >
          <Form form={form} layout="vertical" name="assetForm" onFinish={onFinish}>
             
@@ -161,7 +174,7 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
             </Form.Item>
             
             <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please input the asset description!' }]}>
-               <TextArea disabled={savingData} />
+               <TextArea rows={5} disabled={savingData} />
             </Form.Item>
             
             <Form.Item name="status" label="Status" rules={[{ required: true, message: 'Please select the asset status!' }]}>
@@ -188,7 +201,7 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
             </Form.Item>
 
             <Form.Item name="healthLevel" label="Health Level" rules={[{ required: true, message: 'Please select the asset health level!' }]}>
-               <Slider defaultValue={100} disabled={savingData} />
+               <Slider disabled={savingData} />
             </Form.Item>
             
             <Form.Item name="imageId" label="Image" rules={[{ required: true, message: 'Please select a image!' }]}>

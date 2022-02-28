@@ -99,7 +99,45 @@ const AssetsPage: React.FC = () => {
    }
 
    const createEditAsset = (oldAsset: Asset | undefined, newAsset: Asset) => {
-      console.log(oldAsset, newAsset);
+      
+      setModalErrorMessage("");
+      setSavingData(true);
+
+      if (oldAsset) {
+         
+         apiService.updateAsset(companyId!, unitId!, newAsset)
+         .then(updatedAsset => {
+            
+            const newAssets = [...assets];
+            newAssets.splice(newAssets.indexOf(oldAsset), 1, updatedAsset);
+            
+            setAssets(newAssets);
+            setSavingData(false);
+            setAssetFormModalVisible(false);
+         })
+         .catch(err => {
+            setModalErrorMessage(err.message);
+            setSavingData(false);
+         });
+         
+      } else {
+         
+         apiService.createNewAsset(companyId!, unitId!, newAsset)
+         .then(insertedAsset => {
+
+            const newAssets = [ ...assets, insertedAsset ];
+            setAssets(newAssets);
+            setSavingData(false);
+            setAssetFormModalVisible(false);
+            
+         })
+         .catch(err => {
+            setModalErrorMessage(err.message);
+            setSavingData(false);
+         })
+         
+      }
+      
    }
 
    const assetsTableCols: TableColumnsType<Asset> = [
