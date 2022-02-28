@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { Button, Col, Divider, Image, Layout, Popconfirm, Progress, Result, Row, Space, Spin, Statistic, Table, TableColumnsType, Tabs, Input } from "antd";
+import { Button, Col, Divider, Image, Layout, Popconfirm, Progress, Result, Row, Space, Spin, Statistic, Table, TableColumnsType, Tabs, Input, message } from "antd";
 import { useEffect, useState } from "react";
 import apiService from "../../services/apiService";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
@@ -98,6 +98,22 @@ const AssetsPage: React.FC = () => {
       setFilterValue(value);
    }
 
+   const deleteAsset = (asset: Asset) => {
+      
+      setIsLoading(true);
+
+      apiService.deleteAsset(companyId!, unitId!, asset.id)
+      .then(() => {
+         setAssets(assets.filter(a => a.id != asset.id))
+         setIsLoading(false);
+      })
+      .catch((err) => {
+         message.error(err.message);
+         setIsLoading(false);
+      });
+      
+   };
+
    const createEditAsset = (oldAsset: Asset | undefined, newAsset: Asset) => {
       
       setModalErrorMessage("");
@@ -178,7 +194,7 @@ const AssetsPage: React.FC = () => {
                
                <Popconfirm
                   title="Are you sure to delete this user?"
-                  // onConfirm={() => deleteAsset(asset)}
+                  onConfirm={() => deleteAsset(asset)}
                   okText="Yes"
                   cancelText="No"
                >
