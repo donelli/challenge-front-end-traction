@@ -61,6 +61,18 @@ class ApiService {
       return asset;
    }
 
+   private assetToReqBody(asset: Asset) {
+      return {
+         name: asset.name,
+         description: asset.description,
+         model: asset.model,
+         ownerId: asset.ownerId,
+         imageId: asset.imageId,
+         health_level: asset.healthLevel,
+         status: asset.status
+      };
+   }
+
    private performRequest(endpoint: string, method: 'POST' | 'GET' | 'PUT' | 'DELETE', body?: any): Promise<{ status: number, data: any }> {
       return new Promise((resolve, reject) => {
          
@@ -256,7 +268,7 @@ class ApiService {
 
    createNewAsset(companyId: string, unitId: string, asset: Asset): Promise<Asset> {
       
-      return this.performRequest(`/companies/${companyId}/units/${unitId}/assets`, 'POST', JSON.stringify(asset))
+      return this.performRequest(`/companies/${companyId}/units/${unitId}/assets`, 'POST', JSON.stringify(this.assetToReqBody(asset)))
       .then(response => {
          return this.dataToAsset(response.data)
       });
@@ -265,7 +277,7 @@ class ApiService {
 
    updateAsset(companyId: string, unitId: string, asset: Asset): Promise<Asset> {
       
-      return this.performRequest(`/companies/${companyId}/units/${unitId}/assets/${asset.id}`, 'PUT', JSON.stringify(asset))
+      return this.performRequest(`/companies/${companyId}/units/${unitId}/assets/${asset.id}`, 'PUT', JSON.stringify(this.assetToReqBody(asset)))
       .then(response => {
          return this.dataToAsset(response.data)
       });
