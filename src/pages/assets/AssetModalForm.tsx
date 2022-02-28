@@ -83,10 +83,14 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
       
    }, [ visible, companyId ]);
    
-   const onOk = () => {}
-   const onFinish = () => {
-      console.log(form.getFieldsValue());
-
+   const onFinish = async () => {
+      
+      const values = await form.validateFields();
+      
+      const newAsset = new Asset('', values.name, values.description, values.model, values.owner, currentImageUrl, values.healthLevel, undefined, values.status, values.imageId);
+      
+      onCreateEditSubmit(asset, newAsset);
+      
    };
 
    const possibleStatus = getPossibleStatus();
@@ -140,7 +144,7 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
          okButtonProps={{ loading: savingData, }}
          title={ asset ? 'Edit asset' : 'New asset' }
          visible={visible}
-         onOk={savingData ? undefined : onOk}
+         onOk={savingData ? undefined : onFinish}
          okText={savingData ? 'Saving...' : 'Ok'}
          onCancel={onCancel}
          closable={!savingData}

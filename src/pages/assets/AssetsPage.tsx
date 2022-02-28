@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { Button, Col, Divider, Image, Layout, Popconfirm, Progress, Result, Row, Space, Spin, Statistic, Table, TableColumnsType, Tabs } from "antd";
+import { Button, Col, Divider, Image, Layout, Popconfirm, Progress, Result, Row, Space, Spin, Statistic, Table, TableColumnsType, Tabs, Input } from "antd";
 import { useEffect, useState } from "react";
 import apiService from "../../services/apiService";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
@@ -12,6 +12,7 @@ import AssetModalForm from "./AssetModalForm";
 
 const { Content } = Layout;
 const { TabPane } = Tabs;
+const { Search } = Input;
 
 const AssetsPage: React.FC = () => {
    
@@ -20,12 +21,12 @@ const AssetsPage: React.FC = () => {
    const [unit, setUnit] = useState<Unit | undefined>();
    const [errorMessage, setErrorMessage] = useState<string | undefined>();
    
-   const [assets, setAssets] = useState<Asset[]>();
+   const [assets, setAssets] = useState<Asset[]>([]);
    const [isLoadingAssets, setIsLoadingAssets] = useState(true);
    
    const [isAssetDetailsModalVisible, setAssetDetailsModalVisible] = useState(false);
    const [assetDetailsToShow, setAssetDetailsToShow] = useState<Asset>();
-   
+   const [filterValue, setFilterValue] = useState('');
    const [isSavingData, setSavingData] = useState(false);
    const [isAssetFormModalVisible, setAssetFormModalVisible] = useState(false);
    const [modalErrorMessage, setModalErrorMessage] = useState("");
@@ -93,6 +94,14 @@ const AssetsPage: React.FC = () => {
       setAssetFormModalVisible(true);
    };
    
+   const onSearch = (value: string) => {
+      setFilterValue(value);
+   }
+
+   const createEditAsset = (oldAsset: Asset | undefined, newAsset: Asset) => {
+      console.log(oldAsset, newAsset);
+   }
+
    const assetsTableCols: TableColumnsType<Asset> = [
       {
          title: 'Image',
@@ -142,6 +151,15 @@ const AssetsPage: React.FC = () => {
          )
       }
    ];
+
+   const filteredAssets = assets.filter(asset => {
+      
+      if (!filterValue || asset.name.toLowerCase().includes(filterValue.toLowerCase())) {
+         return true;
+      }
+      
+      return false;
+   });
    
    return (<Content style={{ padding: '20px', textAlign: unit ? 'inherit' : 'center' }}>
       {isLoading && <Spin tip="Loading unit data..." style={{ marginTop: '20px' }} />}
@@ -171,13 +189,26 @@ const AssetsPage: React.FC = () => {
          <Tabs type="line" tabPosition="top" defaultValue={0}>
             <TabPane tab="Assets" key="1">
                
+               <Row>
+                  <Col xs={18} md={20}>
+                     <Search
+                        placeholder="Filter assets"
+                        allowClear
+                        onSearch={onSearch}
+                     />
+                  </Col>
+                  <Col xs={6} md={4} style={{ textAlign: 'right' }}>
+                     <Button type="primary" onClick={createNewAsset}>New asset</Button>
+                  </Col>
+               </Row>
+               
                <Table
                   locale={{ emptyText: 'No assets found' }}
                   style={{ marginTop: '10px' }}
                   rowKey={(asset: Asset) => asset.id}
                   loading={isLoadingAssets}
                   columns={assetsTableCols}
-                  dataSource={assets}
+                  dataSource={filteredAssets}
                />
                
             </TabPane>
@@ -196,7 +227,7 @@ const AssetsPage: React.FC = () => {
             asset={editingAsset}
             onCancel={closeAssetModal}
             savingData={isSavingData}
-            onCreateEditSubmit={() => {}}
+            onCreateEditSubmit={createEditAsset}
             companyId={companyId!}
          />
          

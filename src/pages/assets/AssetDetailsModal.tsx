@@ -58,7 +58,7 @@ const AssetDetailsModal: React.FC<AssetDetailsModalProps> = ({ companyId, asset,
          <Descriptions.Item label="Model" span={3}>{asset.model}</Descriptions.Item>
          <Descriptions.Item label="Name" span={3}>{asset.name}</Descriptions.Item>
          <Descriptions.Item label="Description" span={3}>{asset.description}</Descriptions.Item>
-         {asset.unit && <Descriptions.Item label="Unit" span={3}>{asset.unit!.name}</Descriptions.Item>}
+            {asset.unit && <Descriptions.Item label="Unit" span={3}>{asset.unit!.name}</Descriptions.Item>}
          <Descriptions.Item label="Owner" span={3}>
             
             {
@@ -74,11 +74,11 @@ const AssetDetailsModal: React.FC<AssetDetailsModalProps> = ({ companyId, asset,
             <StatusIndicator assetStatus={asset.status} />
          </Descriptions.Item>
          
-         <Descriptions.Item label="Health level" span={isMobile ? 3 : 1}>
+         <Descriptions.Item label="Health level" span={3}>
             <Progress type="circle" percent={asset.healthLevel} status={ asset.healthLevel <= 50 ? 'exception' : 'normal' } />
          </Descriptions.Item>
          
-         <Descriptions.Item label="Image" span={isMobile ? 3 : 1}>
+         <Descriptions.Item label="Image" span={3}>
             <Image fallback={apiService.getImageErrorFallback()} src={asset.imageUrl} width="200px" />
          </Descriptions.Item>
          

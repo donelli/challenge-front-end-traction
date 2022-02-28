@@ -15,6 +15,7 @@ export class Asset {
    status: AssetStatus;
    healthLevel: number;
    unit?: Unit;
+   unitId?: string;
    
    createdAt?: Date;
    updatedAt?: Date;
