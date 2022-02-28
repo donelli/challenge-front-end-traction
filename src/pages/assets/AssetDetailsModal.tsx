@@ -52,6 +52,7 @@ const AssetDetailsModal: React.FC<AssetDetailsModalProps> = ({ companyId, asset,
       cancelText={ 'Close' }
       onCancel={onModalClose}
       width={isMobile ? '90%' : '80%'}
+      style={{ top: 20 }}
    >
       
       <Descriptions bordered layout="horizontal">

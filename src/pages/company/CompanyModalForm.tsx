@@ -48,6 +48,7 @@ const CompanyModalForm: React.FC<CompanyModalFormProps> = ({ visible, onCancel, 
          onCancel={onCancel}
          closable={!savingData}
          maskClosable={!savingData}
+         style={{ top: 20 }}
       >
          <Form form={form} layout="vertical" name="companyForm" initialValues={{ name: company ? company.name : '' }} onFinish={onFinish}>
             

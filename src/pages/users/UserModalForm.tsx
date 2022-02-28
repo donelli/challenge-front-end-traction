@@ -48,6 +48,7 @@ const UserModalForm: React.FC<UserModalFormProps> = ({ visible, onCancel, user, 
          onCancel={onCancel}
          closable={!savingData}
          maskClosable={!savingData}
+         style={{ top: 20 }}
       >
          <Form form={form} layout="vertical" name="userForm" initialValues={{ name: user ? user.name : '' }} onFinish={onFinish}>
             

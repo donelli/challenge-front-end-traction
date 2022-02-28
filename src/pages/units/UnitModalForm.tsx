@@ -48,6 +48,7 @@ const UnitModalForm: React.FC<UnitModalFormProps> = ({ visible, onCancel, unit, 
          onCancel={onCancel}
          closable={!savingData}
          maskClosable={!savingData}
+         style={{ top: 20 }}
       >
          <Form form={form} layout="vertical" name="unitForm" initialValues={{ name: unit ? unit.name : '' }} onFinish={onFinish}>
             
