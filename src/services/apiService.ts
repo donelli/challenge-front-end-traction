@@ -54,7 +54,7 @@ class ApiService {
          unit = this.dataToUnit(data.unit);
       }
       
-      const asset = new Asset(data.id, data.name, data.description, data.model, data.owner, data.image, data.health_level, unit, data.status as AssetStatus);
+      const asset = new Asset(data.id, data.name, data.description, data.model, data.owner, data.image, data.health_level, unit, data.status as AssetStatus, data.imageId);
       asset.updatedAt = data.updatedAt;
       asset.createdAt = data.createdAt;
       
@@ -274,6 +274,10 @@ class ApiService {
 
    deleteAsset(companyId: string, unitId: string, assetId: string): Promise<any> {
       return this.performRequest(`/companies/${companyId}/units/${unitId}/assets/${assetId}`, 'DELETE');
+   }
+
+   getAssetUploadUrl() {
+      return `${this.baseUrl}/uploadAssetImage`;
    }
    
 }

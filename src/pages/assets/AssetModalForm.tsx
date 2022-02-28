@@ -1,9 +1,12 @@
-import { Alert, Col, Form, Input, Modal, Row, Select, Slider } from "antd";
+import { Alert, Button, Col, Form, Image, Input, message, Modal, Row, Select, Slider, Space, Upload } from "antd";
 import { useEffect, useState } from "react";
 import { Asset } from "../../models/Asset";
 import { AssetStatus, getPossibleStatus } from "../../models/AssetStatus";
 import User from "../../models/User";
 import apiService from "../../services/apiService";
+import { UploadOutlined } from '@ant-design/icons';
+import { UploadChangeParam } from "antd/lib/upload";
+import { UploadFile } from "antd/lib/upload/interface";
 
 const { TextArea } = Input;
 
@@ -24,6 +27,7 @@ interface AssetFormData {
    status: AssetStatus;
    owner: string;
    healthLevel: number;
+   imageId: string;
 }
 
 const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asset, savingData, errorMessage, onCreateEditSubmit, companyId }) => {
@@ -31,8 +35,13 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
    const [form] = Form.useForm<AssetFormData>();
    const [users, setUsers] = useState<User[]>([]);
    const [isLoadingUsers, setLoadingUsers] = useState<boolean>(false);
+
+   const [currentImageUrl, setCurrentImageUrl] = useState("");
+   const [fileList, setFileList] = useState<UploadFile[]>([])
    
    useEffect(() => {
+
+      setFileList([]);
 
       if (asset) {
          form.setFieldsValue({
@@ -41,10 +50,13 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
             description: asset.description,
             status: asset.status,
             owner: asset.ownerId,
-            healthLevel: asset.healthLevel
+            healthLevel: asset.healthLevel,
+            imageId: asset.imageId
          });
+         setCurrentImageUrl(asset.imageUrl);
       } else {
          form.resetFields();
+         setCurrentImageUrl("");
       }
       
    }, [ asset, form, visible ])
@@ -72,12 +84,55 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
    }, [ visible, companyId ]);
    
    const onOk = () => {}
-   const onFinish = () => {};
+   const onFinish = () => {
+      console.log(form.getFieldsValue());
+
+   };
 
    const possibleStatus = getPossibleStatus();
 
-   // TODO:
-   // - image
+   const uploadProps = {
+      name: 'file',
+      action: apiService.getAssetUploadUrl(),
+      beforeUpload: (file: UploadFile) => {
+         const isPNG = file.type === 'image/png';
+         const isJPG = file.type === 'image/jpeg';
+         
+         if (!isPNG && !isJPG) {
+           message.error(`${file.name} is not a png/jpg file`);
+         }
+         return isPNG || isJPG || Upload.LIST_IGNORE;
+      },
+      onChange(info: UploadChangeParam) {
+         
+         console.warn(info);
+         
+         if (info.file.status === 'done') {
+            
+            form.setFieldsValue({
+               imageId: info.file.response.fileName
+            })
+
+            setCurrentImageUrl(info.file.response.fileUrl);
+            setFileList([]);
+            
+         } else if (info.file.status === 'error') {
+            
+            console.log('failed: ', info.file);
+            message.error(info.file.response.message);
+            
+         } else {
+            setFileList([
+               {
+                  uid: info.file.uid,
+                  name: info.file.name,
+                  status: 'uploading'
+               }
+            ])
+         }
+         
+      },
+   };
    
    return (
       <Modal
@@ -132,16 +187,24 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
                <Slider defaultValue={100} disabled={savingData} />
             </Form.Item>
             
-            {/* <Form.Item label="Image" rules={[{ required: true, message: 'Please select a image!' }]}>
-               <Row>
-                  <Col span={24}>
+            <Form.Item name="imageId" label="Image" rules={[{ required: true, message: 'Please select a image!' }]}>
                      
+               <Space direction="vertical">
+                  
+                  {currentImageUrl && <Image src={currentImageUrl} />}
+                  {!currentImageUrl && <Alert type="warning" message="No image selected" />}
+                  
+                  <Upload
+                     disabled={savingData}
+                     fileList={fileList}
+                     {...uploadProps}
+                  >
+                     <Button icon={<UploadOutlined />}>Upload asset image</Button>
+                  </Upload>
+                  
+               </Space>
                      
-                     
-                     
-                  </Col>
-               </Row>
-            </Form.Item> */}
+            </Form.Item>
             
          </Form>
          
