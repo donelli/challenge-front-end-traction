@@ -97,7 +97,7 @@ const AssetsPage: React.FC = () => {
       {
          title: 'Image',
          dataIndex: 'imageUrl',
-         render: (imageUrl: string) => (<Image width={'150px'} src={imageUrl} />)
+         render: (imageUrl: string) => (<Image fallback={apiService.getImageErrorFallback()} width={'100px'} src={imageUrl} />)
       },
       {
          title: 'Model',

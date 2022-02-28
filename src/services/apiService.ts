@@ -279,6 +279,10 @@ class ApiService {
    getAssetUploadUrl() {
       return `${this.baseUrl}/uploadAssetImage`;
    }
+
+   getImageErrorFallback() {
+      return 'https://www.iconpacks.net/icons/1/free-error-icon-905-thumb.png';
+   }
    
 }
 

@@ -79,7 +79,7 @@ const AssetDetailsModal: React.FC<AssetDetailsModalProps> = ({ companyId, asset,
          </Descriptions.Item>
          
          <Descriptions.Item label="Image" span={isMobile ? 3 : 1}>
-            <Image src={asset.imageUrl} width="200px" />
+            <Image fallback={apiService.getImageErrorFallback()} src={asset.imageUrl} width="200px" />
          </Descriptions.Item>
          
       </Descriptions>
