@@ -1,6 +1,6 @@
 import { Alert } from "antd";
 import React from "react"
-import { AssetStatus } from "../models/Asset"
+import { AssetStatus } from "../models/AssetStatus";
 
 interface StatusIndicatorProps {
    assetStatus: AssetStatus

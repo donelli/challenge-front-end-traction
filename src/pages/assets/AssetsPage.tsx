@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import apiService from "../../services/apiService";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { Unit } from "../../models/Unit";
-import { Asset, AssetStatus } from "../../models/Asset";
+import { Asset } from "../../models/Asset";
 import { StatusIndicator } from "../../components/StatusIndicator";
 import AssetDetailsModal from "./AssetDetailsModal";
+import { AssetStatus } from "../../models/AssetStatus";
+import AssetModalForm from "./AssetModalForm";
 
 const { Content } = Layout;
 const { TabPane } = Tabs;
@@ -23,6 +25,11 @@ const AssetsPage: React.FC = () => {
    
    const [isAssetDetailsModalVisible, setAssetDetailsModalVisible] = useState(false);
    const [assetDetailsToShow, setAssetDetailsToShow] = useState<Asset>();
+   
+   const [isSavingData, setSavingData] = useState(false);
+   const [isAssetFormModalVisible, setAssetFormModalVisible] = useState(false);
+   const [modalErrorMessage, setModalErrorMessage] = useState("");
+   const [editingAsset, setEditingAsset] = useState<Asset>();
    
    const closeAssetDetailsModal = () => {
       setAssetDetailsModalVisible(false);
@@ -69,6 +76,22 @@ const AssetsPage: React.FC = () => {
       setAssetDetailsToShow(asset);
       setAssetDetailsModalVisible(true);
    }
+
+   const closeAssetModal = () => {
+      setEditingAsset(undefined);
+      setModalErrorMessage('');
+      setAssetFormModalVisible(false);
+   }
+
+   const createNewAsset = () => {
+      setEditingAsset(undefined);
+      setAssetFormModalVisible(true);
+   }
+
+   const editAsset = (asset: Asset) => {
+      setEditingAsset(asset);
+      setAssetFormModalVisible(true);
+   };
    
    const assetsTableCols: TableColumnsType<Asset> = [
       {
@@ -103,7 +126,7 @@ const AssetsPage: React.FC = () => {
                <Button
                   type="default"
                   icon={ <EditOutlined /> }
-                  // onClick={() => editAsset(asset)}
+                  onClick={() => editAsset(asset)}
                />
                
                <Popconfirm
@@ -167,7 +190,18 @@ const AssetsPage: React.FC = () => {
             onModalClose={closeAssetDetailsModal}
          />
          
+         <AssetModalForm
+            errorMessage={modalErrorMessage}
+            visible={isAssetFormModalVisible}
+            asset={editingAsset}
+            onCancel={closeAssetModal}
+            savingData={isSavingData}
+            onCreateEditSubmit={() => {}}
+            companyId={companyId!}
+         />
+         
       </div>}
+      
    </Content>)
 }
 

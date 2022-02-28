@@ -3,10 +3,11 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import apiService from "../../services/apiService";
 import { Divider, Row, Col, Spin, Table, TableColumnsType, Result, Button, Image } from "antd";
-import { Asset, AssetStatus } from "../../models/Asset";
+import { Asset } from "../../models/Asset";
 import { Unit } from "../../models/Unit";
 import { StatusIndicator } from "../../components/StatusIndicator";
 import AssetDetailsModal from "./AssetDetailsModal";
+import { AssetStatus, getAssetStatusColor } from "../../models/AssetStatus";
 
 interface AllAssetsPageProps {
    companyId: string;
@@ -16,19 +17,6 @@ interface AssetPerStatus {
    status: string;
    count: number;
    color: string
-}
-
-const getStatusColor = (status: string) => {
-   switch (status) {
-      case 'RUNNING':
-         return '#52c41a';
-      case 'STOPPED':
-         return '#f5222d';
-      case 'ALERT':
-         return '#faad14';
-      default:
-         return '#1890ff';
-   }
 }
 
 const AllAssetsPage: React.FC<AllAssetsPageProps> = ({ companyId }) => {
@@ -59,7 +47,7 @@ const AllAssetsPage: React.FC<AllAssetsPageProps> = ({ companyId }) => {
             return {
                status: status.status,
                count: status.count,
-               color: getStatusColor(status.status)
+               color: getAssetStatusColor(status.status)
             }
          }));
          setLoadingAssetsPerStatus(false);

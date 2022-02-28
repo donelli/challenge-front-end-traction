@@ -1,8 +1,9 @@
 import { Unit } from './../models/Unit';
-import { Asset, AssetStatus } from './../models/Asset';
+import { Asset } from './../models/Asset';
 
 import Company from '../models/Company';
 import User from '../models/User';
+import { AssetStatus } from '../models/AssetStatus';
 
 class ApiService {
 

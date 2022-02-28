@@ -1,12 +1,7 @@
+import { AssetStatus } from "./AssetStatus";
 import { Unit } from "./Unit";
 import User from "./User";
 
-export enum AssetStatus {
-   RUNNING = 'RUNNING',
-   ALERTING = 'ALERTING',
-   STOPPED = 'STOPPED'
-}
- 
 export class Asset {
    
    id: string;
