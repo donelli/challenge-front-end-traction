@@ -39,7 +39,7 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
    const [currentImageUrl, setCurrentImageUrl] = useState("");
    const [fileList, setFileList] = useState<UploadFile[]>([])
    
-   const [usersError, setUsersError] = useState("awasdasd");
+   const [usersError, setUsersError] = useState("");
    
    useEffect(() => {
 
