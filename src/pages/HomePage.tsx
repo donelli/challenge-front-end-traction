@@ -14,7 +14,7 @@ function HomePage() {
 
       <br /><br />
 
-      Here i'm probably going to put a description of the application.
+      This app shows all possible data and actions using the API created in the <a target="_blank" href="https://github.com/donelli/challenge-back-end-tractian">challenge-back-end-tractian</a>.
 
       <Divider />
 

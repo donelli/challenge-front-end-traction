@@ -121,7 +121,7 @@ const SelectCompany: React.FC = () => {
       <div>
          
          <Title level={4}>
-            To start, select a company in the list to "log in" or you could create a new one:
+            Select a company in the list to access details or create a new one:
          </Title>
 
          <Row justify="center" style={{ margin: '20px 0' }}>
