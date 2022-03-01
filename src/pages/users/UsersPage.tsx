@@ -21,6 +21,7 @@ const UsersPage: React.FC<UsersPageProps> = ({ companyId }) => {
    const [isSavingData, setSavingData] = useState(false);
    const [modalErrorMessage, setModalErrorMessage] = useState("");
    const [editingUser, setEditingUser] = useState<User | undefined>(undefined);
+   const [usersError, setUsersError] = useState("");
 
    useEffect(() => {
       
@@ -32,8 +33,8 @@ const UsersPage: React.FC<UsersPageProps> = ({ companyId }) => {
          
       })
       .catch(err => {
-         // TODO handle error
          console.error(err);
+         setUsersError(err.message);
       })
       
    }, [ companyId ]);
@@ -157,6 +158,14 @@ const UsersPage: React.FC<UsersPageProps> = ({ companyId }) => {
          ),
       }
    ];
+
+   if (usersError) {
+      return (
+         <div>
+            <Alert type="error" message={usersError} showIcon />
+         </div>
+      );
+   }
 
    return (<div>
       
