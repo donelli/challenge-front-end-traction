@@ -7,7 +7,7 @@ import { AssetStatus } from '../models/AssetStatus';
 
 class ApiService {
 
-   baseUrl = 'http://challenge-back-end-tractian.herokuapp.com/api/v1'
+   baseUrl = 'https://challenge-back-end-tractian.herokuapp.com/api/v1'
 
    headers: Headers;
    
