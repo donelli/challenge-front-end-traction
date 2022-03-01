@@ -1,4 +1,4 @@
-import { List, Button, Row, Col, Typography, message, Popconfirm } from "antd";
+import { List, Button, Row, Col, Typography, message, Popconfirm, Alert, Result } from "antd";
 
 import { useEffect, useState } from "react";
 import Company from "../../models/Company";
@@ -16,8 +16,8 @@ const SelectCompany: React.FC = () => {
    const [isModalVisible, setIsModalVisible] = useState(false);
    const [isSavingData, setSavingData] = useState(false);
    const [modalErrorMessage, setModalErrorMessage] = useState("");
-   
    const [editingCompany, setEditingCompany] = useState<Company | undefined>(undefined);
+   const [companiesError, setCompaniesError] = useState("");
 
    useEffect(() => {
       
@@ -27,9 +27,8 @@ const SelectCompany: React.FC = () => {
          setLoadingCompanies(false);
       })
       .catch(err => {
-         // TODO handle error
          console.error(err);
-         
+         setCompaniesError(err.message);
       })
 
    }, [])
@@ -103,6 +102,20 @@ const SelectCompany: React.FC = () => {
       }
       
    };
+
+   if (companiesError) {
+      return (
+         <div>
+
+            <Result
+               title="Error"
+               status='error'
+               subTitle={companiesError}
+            />
+            
+         </div>
+      );
+   }
 
    return (
       <div>
