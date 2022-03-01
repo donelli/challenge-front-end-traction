@@ -1,4 +1,4 @@
-import { Alert, Button, Col, Input, message, Popconfirm, Row, Space, Table, TableColumnsType } from "antd";
+import { Alert, Button, Col, Input, message, Popconfirm, Result, Row, Space, Table, TableColumnsType } from "antd";
 import { useEffect, useState } from "react";
 import User from "../../models/User";
 import apiService from "../../services/apiService";
@@ -167,7 +167,13 @@ const UnitsPage: React.FC<UnitsPageProps> = ({ companyId }) => {
    if (unitsError) {
       return (
          <div>
-            <Alert type="error" message={unitsError} showIcon />
+            
+            <Result
+               title="Error"
+               status='error'
+               subTitle={unitsError}
+            />
+            
          </div>
       );
    }
