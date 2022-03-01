@@ -49,8 +49,6 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
 
       if (asset) {
          
-         console.warn(asset.ownerId);
-         
          form.setFieldsValue({
             name: asset.name,
             model: asset.model,
