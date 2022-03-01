@@ -71,8 +71,6 @@ const AssetsPage: React.FC = () => {
       
    }, [ companyId, unitId ]);
    
-   // TODO show company name
-
    const showAssetDetails = (asset: Asset) => {
       setAssetDetailsToShow(asset);
       setAssetDetailsModalVisible(true);

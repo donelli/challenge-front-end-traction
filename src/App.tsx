@@ -26,12 +26,10 @@ function App() {
       
       if (params.length >= 2 && params[1]) {
         
-        if (!currentCompanyId || currentCompanyId.id !== params[1]) {
-          apiService.getCompanyById(params[1]).then((company) => {
-            setCurrentCompany(company);
-            currentCompanyId = company;
-          });
-        }
+        apiService.getCompanyById(params[1]).then((company) => {
+          setCurrentCompany(company);
+          currentCompanyId = company;
+        });
         
       } else {
         setCurrentCompany(undefined);
