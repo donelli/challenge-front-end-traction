@@ -21,13 +21,17 @@ const UnitModalForm: React.FC<UnitModalFormProps> = ({ visible, onCancel, unit, 
    
    useEffect(() => {
 
+      if (!visible) {
+         return;
+      }
+      
       if (unit) {
          form.setFieldsValue({ name: unit.name });
       } else {
          form.setFieldsValue({ name: '' });
       }
       
-   }, [ unit, form ])
+   }, [ unit, form, visible ])
  
    const onOk = () => {
      form.submit();

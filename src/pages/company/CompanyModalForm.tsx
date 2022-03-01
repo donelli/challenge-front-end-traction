@@ -21,13 +21,17 @@ const CompanyModalForm: React.FC<CompanyModalFormProps> = ({ visible, onCancel, 
    
    useEffect(() => {
 
+      if (!visible) {
+         return;
+      }
+      
       if (company) {
          form.setFieldsValue({ name: company.name });
       } else {
          form.setFieldsValue({ name: '' });
       }
       
-   }, [ company, form ])
+   }, [ company, form, visible ])
  
    const onOk = () => {
      form.submit();
