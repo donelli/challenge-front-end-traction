@@ -17,7 +17,9 @@ interface AssetModalFormProps {
    onCancel: () => void;
    onCreateEditSubmit: (oldAsset: Asset | undefined, newAsset: Asset) => void;
    errorMessage: string;
-   companyId: string;
+   users: User[];
+   isLoadingUsers: boolean;
+   usersError: string;
 }
 
 interface AssetFormData {
@@ -30,22 +32,25 @@ interface AssetFormData {
    imageId: string;
 }
 
-const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asset, savingData, errorMessage, onCreateEditSubmit, companyId }) => {
+const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asset, savingData, errorMessage, onCreateEditSubmit, users, isLoadingUsers, usersError }) => {
 
    const [form] = Form.useForm<AssetFormData>();
-   const [users, setUsers] = useState<User[]>([]);
-   const [isLoadingUsers, setLoadingUsers] = useState<boolean>(false);
-
+   
    const [currentImageUrl, setCurrentImageUrl] = useState("");
    const [fileList, setFileList] = useState<UploadFile[]>([])
    
-   const [usersError, setUsersError] = useState("");
-   
    useEffect(() => {
 
+      if (!visible) {
+         return;
+      }
+      
       setFileList([]);
 
       if (asset) {
+         
+         console.warn(asset.ownerId);
+         
          form.setFieldsValue({
             name: asset.name,
             model: asset.model,
@@ -62,28 +67,6 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
       }
       
    }, [ asset, form, visible ])
-   
-   useEffect(() => {
-      
-      if (!visible) {
-         return;
-      }
-      
-      setLoadingUsers(true);
-
-      apiService.getUsers(companyId)
-      .then(users => {
-         
-         setUsers(users);
-         setLoadingUsers(false);
-         
-      })
-      .catch(err => {
-         console.error(err);
-         setUsersError(err.message);
-      });
-      
-   }, [ visible, companyId ]);
    
    const onFinish = async () => {
       
@@ -105,12 +88,9 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
       name: 'file',
       action: apiService.getAssetUploadUrl(),
       beforeUpload: (file: UploadFile) => {
-         console.warn(file.type);
          
          const isPNG = file.type === 'image/png';
          const isJPG = file.type === 'image/jpeg';
-         
-         console.log(isPNG, isJPG);
          
          if (isPNG || isJPG) {
             // ok
@@ -150,7 +130,7 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
          
       },
    };
-   
+
    return (
       <Modal
          cancelButtonProps={{ disabled: savingData }}
@@ -189,22 +169,15 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
             
             <Form.Item name="owner" label="Owner" rules={[{ required: true, message: 'Please select the owner' }]}>
                <Select
-                  showSearch
                   loading={isLoadingUsers}
                   disabled={savingData || !!usersError}
-                  filterOption={(input, option) => {
-                     return option!.children!.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }}
-               >
-                  {users.map(user => (
-                     <Select.Option key={user.id} value={user.id}>{user.name}</Select.Option>
-                  ))}
-               </Select>
-               
-               {usersError && <Alert style={{ marginTop: '5px' }} type="error" message={usersError} />}
+                  options={users.map(u => { return { label: u.name, value: u.id } })}
+               />
                
             </Form.Item>
 
+            {usersError && <Alert style={{ marginTop: '5px' }} type="error" message={usersError} />}
+               
             <Form.Item name="healthLevel" label="Health Level" rules={[{ required: true, message: 'Please select the asset health level!' }]}>
                <Slider disabled={savingData} />
             </Form.Item>

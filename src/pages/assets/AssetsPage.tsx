@@ -9,6 +9,7 @@ import { StatusIndicator } from "../../components/StatusIndicator";
 import AssetDetailsModal from "./AssetDetailsModal";
 import { AssetStatus } from "../../models/AssetStatus";
 import AssetModalForm from "./AssetModalForm";
+import User from "../../models/User";
 
 const { Content } = Layout;
 const { TabPane } = Tabs;
@@ -31,6 +32,10 @@ const AssetsPage: React.FC = () => {
    const [isAssetFormModalVisible, setAssetFormModalVisible] = useState(false);
    const [modalErrorMessage, setModalErrorMessage] = useState("");
    const [editingAsset, setEditingAsset] = useState<Asset>();
+   
+   const [ users, setUsers ] = useState<User[]>([]);
+   const [ isLoadingUsers, setLoadingUsers ] = useState(false);
+   const [ usersError, setUsersError ] = useState('');
    
    const closeAssetDetailsModal = () => {
       setAssetDetailsModalVisible(false);
@@ -67,6 +72,20 @@ const AssetsPage: React.FC = () => {
          setErrorMessage(err.message);
          setIsLoadingAssets(false);
          
+      });
+
+      setLoadingUsers(true);
+
+      apiService.getUsers(companyId!)
+      .then(users => {
+         
+         setUsers(users);
+         setLoadingUsers(false);
+         
+      })
+      .catch(err => {
+         console.error(err);
+         setUsersError(err.message);
       });
       
    }, [ companyId, unitId ]);
@@ -280,7 +299,9 @@ const AssetsPage: React.FC = () => {
             onCancel={closeAssetModal}
             savingData={isSavingData}
             onCreateEditSubmit={createEditAsset}
-            companyId={companyId!}
+            users={users}
+            isLoadingUsers={isLoadingUsers}
+            usersError={usersError}
          />
          
       </div>}
