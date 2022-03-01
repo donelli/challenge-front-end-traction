@@ -1,4 +1,4 @@
-import { Button, Col, Input, message, Popconfirm, Row, Space, Table, TableColumnsType } from "antd";
+import { Alert, Button, Col, Input, message, Popconfirm, Row, Space, Table, TableColumnsType } from "antd";
 import { useEffect, useState } from "react";
 import User from "../../models/User";
 import apiService from "../../services/apiService";
@@ -22,6 +22,7 @@ const UnitsPage: React.FC<UnitsPageProps> = ({ companyId }) => {
    const [isSavingData, setSavingData] = useState(false);
    const [modalErrorMessage, setModalErrorMessage] = useState("");
    const [editingUnit, setEditingUnit] = useState<Unit>();
+   const [unitsError, setUnitsError] = useState("");
 
    useEffect(() => {
       
@@ -33,8 +34,8 @@ const UnitsPage: React.FC<UnitsPageProps> = ({ companyId }) => {
          
       })
       .catch(err => {
-         // TODO handle error
          console.error(err);
+         setUnitsError(err.message);
       })
       
    }, [ companyId ]);
@@ -163,6 +164,14 @@ const UnitsPage: React.FC<UnitsPageProps> = ({ companyId }) => {
       }
    ];
 
+   if (unitsError) {
+      return (
+         <div>
+            <Alert type="error" message={unitsError} showIcon />
+         </div>
+      );
+   }
+   
    return (<div>
       
       <Row>
