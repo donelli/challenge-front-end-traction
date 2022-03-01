@@ -10,3 +10,11 @@
 .textCenter {
    text-align: center;
 }
+
+.back-button {
+   padding-left: 5px !important;
+   padding-right: 5px !important;
+   text-decoration: none;
+   color: gray;
+   margin-bottom: 10px;
+}
