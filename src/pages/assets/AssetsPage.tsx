@@ -10,6 +10,7 @@ import AssetDetailsModal from "./AssetDetailsModal";
 import { AssetStatus } from "../../models/AssetStatus";
 import AssetModalForm from "./AssetModalForm";
 import User from "../../models/User";
+import BackButton from "../../components/BackButton";
 
 const { Content } = Layout;
 const { TabPane } = Tabs;
@@ -233,6 +234,9 @@ const AssetsPage: React.FC = () => {
    });
    
    return (<Content style={{ padding: '20px', textAlign: unit ? 'inherit' : 'center' }}>
+      
+      <BackButton to={`/${companyId}`} title="Back to company details" />
+      
       {isLoading && <Spin tip="Loading unit data..." style={{ marginTop: '20px' }} />}
       {errorMessage && <Result
          title="Error"

@@ -1,11 +1,12 @@
 import { Link, useParams } from "react-router-dom";
-import { Button, Col, Divider, Layout, Result, Row, Spin, Statistic, Tabs } from "antd";
+import { Button, Col, Divider, Layout, PageHeader, Result, Row, Spin, Statistic, Tabs } from "antd";
 import { useEffect, useState } from "react";
 import apiService from "../../services/apiService";
 import Company from "../../models/Company";
 import UsersPage from "../users/UsersPage";
 import AllAssetsPage from "../assets/AllAssetsPage";
 import UnitsPage from "../units/UnitsPage";
+import BackButton from "../../components/BackButton";
 
 const { Content } = Layout;
 const { TabPane } = Tabs;
@@ -36,6 +37,9 @@ const CompanyPage: React.FC = () => {
    }, [ companyId ]);
    
    return (<Content style={{ padding: '20px', textAlign: company ? 'inherit' : 'center' }}>
+      
+      <BackButton to="/" title="Back to company selection" />
+      
       {isLoading && <Spin tip="Loading company data..." style={{ marginTop: '20px' }} />}
       {errorMessage && <Result
          title="Error"
