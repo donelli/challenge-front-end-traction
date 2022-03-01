@@ -86,16 +86,19 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
       name: 'file',
       action: apiService.getAssetUploadUrl(),
       beforeUpload: (file: UploadFile) => {
+
+         console.warn('aqui');
          
          const isPNG = file.type === 'image/png';
          const isJPG = file.type === 'image/jpeg';
+         const isGIF = file.type === 'image/gif';
          
-         if (isPNG || isJPG) {
+         if (isPNG || isJPG || isGIF) {
             // ok
          } else {
-           message.error(`${file.name} is not a png/jpg file`);
+           message.error(`${file.name} must be a JPG, PNG or GIF file!`);
          }
-         return isPNG || isJPG || Upload.LIST_IGNORE;
+         return isPNG || isJPG || isGIF || Upload.LIST_IGNORE;
       },
       onChange(info: UploadChangeParam) {
          
