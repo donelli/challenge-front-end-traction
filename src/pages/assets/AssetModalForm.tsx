@@ -39,6 +39,8 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
    const [currentImageUrl, setCurrentImageUrl] = useState("");
    const [fileList, setFileList] = useState<UploadFile[]>([])
    
+   const [usersError, setUsersError] = useState("awasdasd");
+   
    useEffect(() => {
 
       setFileList([]);
@@ -78,7 +80,7 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
       })
       .catch(err => {
          console.error(err);
-         // TODO handle error
+         setUsersError(err.message);
       });
       
    }, [ visible, companyId ]);
@@ -189,7 +191,7 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
                <Select
                   showSearch
                   loading={isLoadingUsers}
-                  disabled={savingData}
+                  disabled={savingData || !!usersError}
                   filterOption={(input, option) => {
                      return option!.children!.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
                   }}
@@ -198,6 +200,9 @@ const AssetModalForm: React.FC<AssetModalFormProps> = ({ visible, onCancel, asse
                      <Select.Option key={user.id} value={user.id}>{user.name}</Select.Option>
                   ))}
                </Select>
+               
+               {usersError && <Alert style={{ marginTop: '5px' }} type="error" message={usersError} />}
+               
             </Form.Item>
 
             <Form.Item name="healthLevel" label="Health Level" rules={[{ required: true, message: 'Please select the asset health level!' }]}>
